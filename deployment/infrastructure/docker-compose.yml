@@ -1,0 +1,43 @@
+name: tms
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: tms-postgres
+    environment:
+      POSTGRES_USER: ticketuser
+      POSTGRES_PASSWORD: ticketpass
+      POSTGRES_DB: ticket_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ticketuser"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: tms-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tms.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+  redis:
+    image: redis:7
+    container_name: tms-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+
+volumes:
+  pgdata:
