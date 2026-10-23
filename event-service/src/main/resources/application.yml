@@ -5,9 +5,9 @@ spring:
   application:
     name: event-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/event_db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5432/ticket_db
+    username: ticketuser
+    password: ticketpass
   jpa:
     open-in-view: false
     hibernate:
