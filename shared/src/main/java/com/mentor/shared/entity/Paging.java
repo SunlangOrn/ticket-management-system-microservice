@@ -1,5 +1,7 @@
 package com.mentor.shared.entity;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +19,6 @@ public class Paging <T> {
     private int size;
     private int page;
     private long total;
-    private int totalPages;
+    private long totalPages;
+
 }

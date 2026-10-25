@@ -15,14 +15,14 @@ public class HttpBodyPagingResponse {
     private int page;
     private int size;
     private long total;
-    private int totalPages;
+    private long totalPages;
 
     public static HttpBodyPagingResponse from(Map<String, Object> source) {
         return HttpBodyPagingResponse.builder()
                 .page(number(source, "page").intValue())
                 .size(number(source, "size").intValue())
                 .total(number(source, "total").longValue())
-                .totalPages(number(source, "totalPages").intValue())
+                .totalPages(number(source, "totalPages").longValue())
                 .build();
     }
 
