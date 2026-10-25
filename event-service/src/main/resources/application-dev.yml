@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    com.mentor.eventservice: DEBUG
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

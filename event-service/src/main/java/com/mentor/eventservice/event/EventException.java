@@ -9,6 +9,10 @@ public class EventException extends HttpException {
         return new EventException(HttpStatus.NOT_FOUND, "Event not found");
     }
 
+    public static EventException unprocessableEntity(String message) {
+        return new EventException(HttpStatus.UNPROCESSABLE_CONTENT, message);
+    }
+
     public static EventException badRequest(String message) {
         return new EventException(HttpStatus.BAD_REQUEST, message);
     }

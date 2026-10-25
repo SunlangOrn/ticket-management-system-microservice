@@ -7,6 +7,7 @@ import com.mentor.shared.entity.PaginationQuery;
 import com.mentor.shared.entity.Paging;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import static com.mentor.eventservice.event.EventException.notFound;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@NullMarked
 public class EventService {
 
     private final EventRepository repository;
@@ -56,8 +58,16 @@ public class EventService {
     @Transactional
     public EventResponse publish(Long id) {
         Event event = find(id);
-        event.publish(); // dirty checking saves it on commit
+        event.publish();
         log.info("Event published id={}", id);
+        return mapper.toResponse(event);
+    }
+
+    @Transactional
+    public EventResponse cancel(Long id) {
+        Event event = find(id);
+        event.cancel();
+        log.info("Event cancelled id={}", id);
         return mapper.toResponse(event);
     }
 

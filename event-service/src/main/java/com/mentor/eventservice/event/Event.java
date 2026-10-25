@@ -1,22 +1,33 @@
 package com.mentor.eventservice.event;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "events")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // for JPA only
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "organizer_id")
+    private UUID organizerId;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -44,11 +55,12 @@ public class Event {
     private Instant createdAt;
 
     @Builder
-    private Event (String title, String description, String venueName,
+    private Event(UUID organizerId, String title, String description, String venueName,
                   String city, Instant startsAt, Instant endsAt) {
         if (!endsAt.isAfter(startsAt)) {
             throw EventException.badRequest("endsAt must be after startsAt");
         }
+        this.organizerId = organizerId;
         this.title = title;
         this.description = description;
         this.venueName = venueName;
@@ -61,10 +73,17 @@ public class Event {
 
     public void publish() {
         if (status != EventStatus.DRAFT) {
-            throw EventException.badRequest(
+            throw EventException.unprocessableEntity(
                     "Only DRAFT events can be published (current status: " + status + ")");
         }
         this.status = EventStatus.PUBLISHED;
     }
 
+    public void cancel() {
+        if (status != EventStatus.DRAFT && status != EventStatus.PUBLISHED) {
+            throw EventException.unprocessableEntity(
+                    "Only DRAFT or PUBLISHED events can be cancelled (current status: " + status + ")");
+        }
+        this.status = EventStatus.CANCELLED;
+    }
 }

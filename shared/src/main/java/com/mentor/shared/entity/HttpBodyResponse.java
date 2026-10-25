@@ -1,6 +1,7 @@
 package com.mentor.shared.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.jspecify.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NonNull
 public class HttpBodyResponse <T> {
 
     public static final String DEFAULT_MESSAGE = "Successful";

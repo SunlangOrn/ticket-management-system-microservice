@@ -6,7 +6,9 @@ import com.mentor.shared.entity.HttpBodyResponse;
 import com.mentor.shared.entity.PaginationQuery;
 import com.mentor.shared.entity.Paging;
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,7 @@ import static com.mentor.shared.api.ControllerHandler.responseSucceed;
 @RestController
 @RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
+@NullMarked
 public class EventController {
 
     private final EventService service;
@@ -40,19 +43,24 @@ public class EventController {
 
         Paging<EventResponse> result = service.listPublished(city, query);
 
-        // 1. បង្កើត paging response ពីទិន្នន័យក្នុង Paging object
         HttpBodyPagingResponse pagingResponse = HttpBodyPagingResponse.builder()
                 .page(result.getPage())
                 .size(result.getSize())
-                .totalPages(result.getTotal())
+                .total(result.getTotal())
                 .totalPages(result.getTotalPages())
                 .build();
 
         // 2. ប្រើប្រាស់ responsePaged ឲ្យត្រូវនឹង ControllerHandler
         return ControllerHandler.responsePaged(result.getItems(), pagingResponse);
     }
+
     @PatchMapping("/{id}/publish")
     public ResponseEntity<HttpBodyResponse<EventResponse>> publish(@PathVariable Long id) {
         return responseSucceed(service.publish(id));
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<HttpBodyResponse<EventResponse>> cancel(@PathVariable Long id) {
+        return responseSucceed(service.cancel(id));
     }
 }
