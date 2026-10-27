@@ -1,17 +1,20 @@
 server:
-  port: ${SERVER_PORT:8082}
+  port: ${SERVER_PORT:8081}
 
 spring:
   application:
     name: event-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/ticket_db
-    username: ticketuser
-    password: ticketpass
+    url: ${EVENT_DB_URL:jdbc:postgresql://localhost:5432/event_db}
+    username: ${EVENT_DB_USERNAME:event_user}
+    password: ${EVENT_DB_PASSWORD:event_pass}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
   data:
     web:
       pageable:

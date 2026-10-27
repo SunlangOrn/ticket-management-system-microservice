@@ -1,7 +1,6 @@
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
+  datasource:
+    password: ${EVENT_DB_PASSWORD:event_pass}   # dev-only default
 
 logging:
   level:

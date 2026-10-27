@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record EventResponse(
-        Long id,
+        UUID id,
         UUID organizerId,
         String title, String
         description,

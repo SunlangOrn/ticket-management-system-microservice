@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.mentor.shared.api.ControllerHandler.responseCreated;
 import static com.mentor.shared.api.ControllerHandler.responseSucceed;
@@ -32,7 +33,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HttpBodyResponse<EventResponse>> get(@PathVariable Long id) {
+    public ResponseEntity<HttpBodyResponse<EventResponse>> get(@PathVariable UUID id) {
         return responseSucceed(service.get(id));
     }
 
@@ -55,12 +56,12 @@ public class EventController {
     }
 
     @PatchMapping("/{id}/publish")
-    public ResponseEntity<HttpBodyResponse<EventResponse>> publish(@PathVariable Long id) {
+    public ResponseEntity<HttpBodyResponse<EventResponse>> publish(@PathVariable UUID id) {
         return responseSucceed(service.publish(id));
     }
 
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<HttpBodyResponse<EventResponse>> cancel(@PathVariable Long id) {
+    public ResponseEntity<HttpBodyResponse<EventResponse>> cancel(@PathVariable UUID id) {
         return responseSucceed(service.cancel(id));
     }
 }

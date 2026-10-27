@@ -18,6 +18,7 @@
     <modules>
         <module>shared</module>
         <module>event-service</module>
+        <module>ticket-service</module>
     </modules>
 	<url/>
 	<licenses>

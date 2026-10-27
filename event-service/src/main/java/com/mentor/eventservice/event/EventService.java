@@ -34,7 +34,7 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventResponse get(Long id) {
+    public EventResponse get(UUID id) {
         return mapper.toResponse(find(id));
     }
 
@@ -56,7 +56,7 @@ public class EventService {
     }
 
     @Transactional
-    public EventResponse publish(Long id) {
+    public EventResponse publish(UUID id) {
         Event event = find(id);
         event.publish();
         log.info("Event published id={}", id);
@@ -64,14 +64,14 @@ public class EventService {
     }
 
     @Transactional
-    public EventResponse cancel(Long id) {
+    public EventResponse cancel(UUID id) {
         Event event = find(id);
         event.cancel();
         log.info("Event cancelled id={}", id);
         return mapper.toResponse(event);
     }
 
-    private Event find(Long id) {
+    private Event find(UUID id) {
         return repository.findById(id)
                 .orElseThrow(EventException::notFound);
     }
