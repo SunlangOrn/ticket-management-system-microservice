@@ -1,4 +1,4 @@
-package com.mentor.userservice.entity;
+package com.mentor.userservice.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

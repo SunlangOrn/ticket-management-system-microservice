@@ -1,7 +1,7 @@
-package com.mentor.userservice.mapper;
+package com.mentor.userservice.user.mapper;
 
-import com.mentor.userservice.dto.UserResponse;
-import com.mentor.userservice.entity.UserAccount;
+import com.mentor.userservice.user.dto.UserResponse;
+import com.mentor.userservice.user.entity.UserAccount;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

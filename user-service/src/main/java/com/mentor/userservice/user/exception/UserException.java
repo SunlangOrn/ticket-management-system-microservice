@@ -1,4 +1,4 @@
-package com.mentor.userservice.exception;
+package com.mentor.userservice.user.exception;
 
 import com.mentor.shared.exception.HttpException;
 import org.springframework.http.HttpStatus;

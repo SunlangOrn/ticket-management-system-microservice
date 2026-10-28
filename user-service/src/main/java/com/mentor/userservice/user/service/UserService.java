@@ -1,12 +1,11 @@
-package com.mentor.userservice.service;
+package com.mentor.userservice.user.service;
 
 import java.util.UUID;
 
-import com.mentor.shared.exception.HttpException;
-import com.mentor.userservice.dto.UserResponse;
-import com.mentor.userservice.exception.UserException;
-import com.mentor.userservice.mapper.UserMapper;
-import com.mentor.userservice.repository.UserRepository;
+import com.mentor.userservice.user.dto.UserResponse;
+import com.mentor.userservice.user.exception.UserException;
+import com.mentor.userservice.user.mapper.UserMapper;
+import com.mentor.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

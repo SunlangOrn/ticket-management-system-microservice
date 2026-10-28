@@ -1,6 +1,6 @@
-package com.mentor.userservice.repository;
+package com.mentor.userservice.user.repository;
 
-import com.mentor.userservice.entity.UserAccount;
+import com.mentor.userservice.user.entity.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
