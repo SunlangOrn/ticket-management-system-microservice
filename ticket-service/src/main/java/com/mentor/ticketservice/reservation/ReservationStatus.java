@@ -1,8 +1,8 @@
 package com.mentor.ticketservice.reservation;
 
 public enum ReservationStatus {
-    HELD,
+    HOLD,
     CONFIRMED,
-    RELEASED,
+    CANCELLED,
     EXPIRED
 }

@@ -30,8 +30,6 @@ public class TicketType {
     @Column(nullable = false)
     private int quota;
 
-    // reserved and sold are changed ONLY by the atomic SQL in TicketTypeRepository.
-    // updatable = false guarantees JPA can never overwrite them with a stale value.
     @Column(nullable = false, updatable = false)
     private int reserved;
 

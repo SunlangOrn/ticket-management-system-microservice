@@ -12,5 +12,7 @@ public interface ReservationService {
 
     ReservationResponse confirm(UUID reservationId);
 
+    boolean expire(UUID id);
+
 
 }

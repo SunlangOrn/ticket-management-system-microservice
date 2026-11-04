@@ -11,15 +11,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
+
 
 @Entity
 @Table(name = "reservations")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
 
@@ -47,25 +48,25 @@ public class Reservation {
     private Instant createdAt;
 
     public void confirm(Instant now) {
-        requireHeld("confirmed");
+        requireHold("confirmed");
         if (!expiresAt.isAfter(now)) {
             throw TicketException.reservationIsExpired();
         }
         this.status = ReservationStatus.CONFIRMED;
     }
 
-    public void release() {
-        requireHeld("released");
-        this.status = ReservationStatus.RELEASED;
+    public void cancel() {
+        requireHold("cancelled");
+        this.status = ReservationStatus.CANCELLED;
     }
 
     public void expire() {
-        requireHeld("expired");
+        requireHold("expired");
         this.status = ReservationStatus.EXPIRED;
     }
 
-    private void requireHeld(String action) {
-        if (status != ReservationStatus.HELD) {
+    private void requireHold(String action) {
+        if (status != ReservationStatus.HOLD) {
            throw TicketException.invalidStatus(action, status.name());
         }
     }
