@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:ticket-service-test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+
+tms:
+  reservation:
+    expiry-scheduler-enabled: false
+  security:
+    jwt:
+      issuer: http://localhost:8081
+      jwk-set-uri: http://localhost:8081/.well-known/jwks.json
+
+management:
+  otlp:
+    metrics:
+      export:
+        enabled: false

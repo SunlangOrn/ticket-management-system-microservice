@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.naming.AuthenticationException;
 import java.io.IOException;
 
 public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
