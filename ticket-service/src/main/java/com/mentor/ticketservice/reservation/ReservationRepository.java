@@ -17,7 +17,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     Optional<Reservation> findByIdAndUserId(UUID id, UUID userId);
 
 
-    /** SELECT ... FOR UPDATE: confirm, release and expire can never run on one row at once. */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select r from Reservation r where r.id = :id")
     Optional<Reservation> findByIdForUpdate(@Param("id") UUID id);

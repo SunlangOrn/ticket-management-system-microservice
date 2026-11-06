@@ -13,3 +13,4 @@ EOSQL
 create_service_db event_db  event_user  "${EVENT_DB_PASSWORD:-event_pass}"
 create_service_db ticket_db ticket_user "${TICKET_DB_PASSWORD:-ticket_pass}"
 create_service_db user_db user_user "${USER_DB_PASSWORD:-user_pass}"
+create_service_db order_db order_user "${ORDER_DB_PASSWORD:-order_pass}"
