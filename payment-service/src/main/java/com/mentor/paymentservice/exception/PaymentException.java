@@ -9,6 +9,24 @@ public class PaymentException extends HttpException {
         super(status, message);
     }
 
+    public static PaymentException orderNotPayable(String status) {
+        return new PaymentException(
+                HttpStatus.CONFLICT, "The order is not waiting for payment (status: " + status + ")"
+        );
+    }
+
+    public static PaymentException nothingToPay() {
+        return new PaymentException(
+                HttpStatus.CONFLICT, "There is nothing to pay for this order"
+        );
+    }
+
+    public static PaymentException orderAboutToExpire() {
+        return new PaymentException(
+                HttpStatus.CONFLICT, "The order is about to expire. Please place a new order."
+        );
+    }
+
     public static PaymentException cannotFail(String message) {
         return new PaymentException(HttpStatus.CONFLICT, message);
     }
