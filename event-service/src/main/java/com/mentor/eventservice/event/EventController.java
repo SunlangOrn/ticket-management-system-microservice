@@ -50,8 +50,6 @@ public class EventController {
                 .total(result.getTotal())
                 .totalPages(result.getTotalPages())
                 .build();
-
-        // 2. ប្រើប្រាស់ responsePaged ឲ្យត្រូវនឹង ControllerHandler
         return ControllerHandler.responsePaged(result.getItems(), pagingResponse);
     }
 

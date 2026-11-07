@@ -1,0 +1,46 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: payment-service
+  profiles:
+    default: dev
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name}]"
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: "@project.version@"
+
+tms:
+  payment:
+    window: 8m            # រយៈពេលអតិបរមាដែលអ្នកទិញមានដើម្បីបង់
+    safety-margin: 1m     # payment ត្រូវផុតមុន reservation យ៉ាងតិចប៉ុណ្ណេះ (ក៏ជា grace ផងដែរ)
+    min-lifetime: 3m      # QR ត្រូវមានអាយុយ៉ាងតិចប៉ុណ្ណេះ
+    check-cooldown: 2s    # ចន្លោះអប្បបរមារវាងការសួរ ABA
+    currency: USD
+    expiry-interval: PT30S
+  clients:
+    order-service:
+      connect-timeout: 2s
+      read-timeout: 5s
