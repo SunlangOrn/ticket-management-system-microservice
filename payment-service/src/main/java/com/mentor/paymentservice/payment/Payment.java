@@ -39,11 +39,13 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false, updatable = false, length = 30)
-    private PaymentMethod paymentMethod;
+    @Builder.Default
+    private PaymentMethod paymentMethod = PaymentMethod.ABA_PAYWAY_KHQR;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private PaymentStatus status;
+    @Builder.Default
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     @Column(nullable = false, updatable = false, precision = 12, scale = 2)
     private BigDecimal amount;

@@ -5,12 +5,13 @@ import com.mentor.paymentservice.aba.AbaPayWayGateway.QrCommand;
 import com.mentor.paymentservice.aba.AbaPayWayGateway.QrResult;
 import com.mentor.paymentservice.client.OrderServiceClient;
 import com.mentor.paymentservice.client.OrderServiceClient.OrderInfo;
-import com.mentor.paymentservice.common.BusinessRuleException;
-import com.mentor.tms.share.exception.HttpException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.mentor.paymentservice.exception.PaymentException;
+import com.mentor.shared.exception.HttpException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,18 +63,21 @@ public class PaymentService {
         PaymentResponse response = storeQr(payment.getId(), qr);   // transaction 2
 
         log.info("Payment created id={} order={} amount={}", payment.getId(), orderId, payment.getAmount());
-        return new CreateResult(response.withQrImage(qr.qrImage()), true);
+        return new CreateResult(PaymentResponse.includingQrImage(response, qr.qrImage()), true);
     }
 
     /** The amount and the deadline come from order-service, which also checks the owner. */
     private OrderInfo loadPayableOrder(UUID orderId) {
         OrderInfo order = orders.getOrder(orderId);
+
         if (!ORDER_WAITING_FOR_PAYMENT.equals(order.status())) {
-            throw new BusinessRuleException("The order is not waiting for payment (status: " + order.status() + ")");
+            throw PaymentException.orderNotPayable(order.status());
         }
+
         if (order.totalAmount().signum() <= 0) {
-            throw new BusinessRuleException("There is nothing to pay for this order");
+            throw PaymentException.nothingToPay();
         }
+
         return order;
     }
 
@@ -82,11 +86,15 @@ public class PaymentService {
         Instant now = Instant.now();
         Instant byWindow = now.plus(properties.window());
         Instant byReservation = order.expiresAt().minus(properties.safetyMargin());
-        Instant expiresAt = byWindow.isBefore(byReservation) ? byWindow : byReservation;
+
+        Instant expiresAt = byWindow.isBefore(byReservation)
+                ? byWindow
+                : byReservation;
 
         if (Duration.between(now, expiresAt).compareTo(properties.minLifetime()) < 0) {
-            throw new BusinessRuleException("The order is about to expire, please place a new order");
+            throw PaymentException.orderAboutToExpire();
         }
+
         return expiresAt;
     }
 
@@ -108,7 +116,7 @@ public class PaymentService {
         }
 
         settlement.settle(id, Duration.ZERO);
-        Payment current = payments.findById(id).orElseThrow(() -> new PaymentNotFoundException(id));
+        Payment current = payments.findById(id).orElseThrow(() -> PaymentException.notFound(id));
         return switch (current.getStatus()) {
             case COMPLETED -> throw new HttpException(HttpStatus.CONFLICT, "This order is already paid");
             case PENDING -> Optional.of(mapper.toResponse(current));
@@ -153,7 +161,7 @@ public class PaymentService {
     private PaymentResponse storeQr(UUID paymentId, QrResult qr) {
         return tx.execute(ignored -> {
             Payment payment = payments.findByIdForUpdate(paymentId)
-                    .orElseThrow(() -> new PaymentNotFoundException(paymentId));
+                    .orElseThrow(() -> PaymentException.notFound(paymentId));
             payment.attachQr(qr.qrString(), qr.deeplink());
             return mapper.toResponse(payment);
         });
@@ -186,13 +194,13 @@ public class PaymentService {
         // Someone else's payment is reported as "not found", never as "forbidden"
         return payments.findByIdAndUserId(paymentId, userId)
                 .map(mapper::toResponse)
-                .orElseThrow(() -> new PaymentNotFoundException(paymentId));
+                .orElseThrow(() ->  PaymentException.notFound(paymentId));
     }
 
     /** The buyer asks "did my payment arrive?". Safe to call as often as the client likes. */
     public PaymentResponse check(UUID userId, UUID paymentId) {
         payments.findByIdAndUserId(paymentId, userId)
-                .orElseThrow(() -> new PaymentNotFoundException(paymentId));
+                .orElseThrow(() -> PaymentException.notFound(paymentId));
         return settlement.refresh(paymentId, false);
     }
 }

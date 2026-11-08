@@ -31,7 +31,8 @@ public class OrderServiceClient {
 
     /** Only what payment-service needs from an order. Unknown fields are ignored on purpose. */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record OrderInfo(UUID id, BigDecimal totalAmount, String status, Instant expiresAt) { }
+    public record OrderInfo(UUID id, String ticketTypeName, BigDecimal unitPrice, int quantity,
+                            BigDecimal totalAmount, String status, Instant expiresAt) { }
 
     /** order-service answers 404 for an order that belongs to someone else, so ownership is checked there. */
     public OrderInfo getOrder(UUID orderId) {

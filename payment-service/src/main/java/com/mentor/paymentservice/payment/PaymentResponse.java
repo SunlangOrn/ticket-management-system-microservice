@@ -19,8 +19,9 @@ public record PaymentResponse(
         Instant createdAt) {
 
     /** The QR image is big and is only returned once, when the payment is created. */
-    public PaymentResponse withQrImage(String image) {
-        return new PaymentResponse(id, orderId, paymentMethod, amount, currency, status, qrString, image,
-                deeplink, expiresAt, paidAt, createdAt);
+    public static PaymentResponse includingQrImage(PaymentResponse response, String image) {
+        return new PaymentResponse(response.id, response.orderId, response.paymentMethod, response.amount,
+                response.currency, response.status, response.qrString, image, response.deeplink,
+                response.expiresAt, response.paidAt, response.createdAt);
     }
 }

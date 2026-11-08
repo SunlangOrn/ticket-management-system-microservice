@@ -1,4 +1,4 @@
-package com.example.paymentservice.config;
+package com.mentor.paymentservice.config;
 
 import com.mentor.paymentservice.config.JwtProperties;
 import com.mentor.shared.security.JsonAccessDeniedHandler;
